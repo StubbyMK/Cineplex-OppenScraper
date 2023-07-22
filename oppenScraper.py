@@ -35,13 +35,13 @@ def oppenScrape(url):
 
     while True:
         try:
-            current_datetime = datetime.datetime.now()
-            formatted_datetime = current_datetime.strftime("%Y-%m-%d %I:%M:%S %p")
+            currentDateTime = datetime.datetime.now()
+            formattedDateTime = currentDateTime.strftime("%Y-%m-%d %I:%M:%S %p")
 
             #click on tickets button
-            buttonDivParent = driver.find_element(By.XPATH, "//button[@data-name='get-tickets']")
+            ticketsBtn = driver.find_element(By.XPATH, "//button[@data-name='get-tickets']")
             print("\nFOUND TICKET BUTTON")
-            buttonDivParent.click()
+            ticketsBtn.click()
             print("CLICKED TICKET BUTTON\n")
             time.sleep(5)
 
@@ -65,8 +65,8 @@ def oppenScrape(url):
                 if sauga:
                     systemWorking = True
             except Exception as e:
-                error_message = str(e)
-                if "no such element: Unable to locate element" in error_message:
+                errorMessage = str(e)
+                if "no such element: Unable to locate element" in errorMessage:
                     systemWorking = False
 
             recipients = ["example1@gmail.com", "example2@gmail.com"] #ist of email addresses to send the email
@@ -76,7 +76,7 @@ def oppenScrape(url):
                 if vaughan:
                     print("\n\nFLOOD GATE HAS OPENED")
                     #send notification email
-                    message_body = f"""
+                    messageBody = f"""
                     The movie 'Oppenheimer' is now available at Cineplex Cinemas Vaughan on July 29th.
 
                     https://www.cineplex.com/movie/oppenheimer-the-imax-experience-in-70mm-film?ic=cpx_hp-moviegrid-en
@@ -87,19 +87,19 @@ def oppenScrape(url):
                     
                     OppenScraperBot
                     """
-                    sendEmail("Oppenheimer Available for July 29th", message_body, recipients, importance="High")                    
+                    sendEmail("Oppenheimer Available for July 29th", messageBody, recipients, importance="High")                    
                 break
             except Exception as e:
-                error_message = str(e)
-                if "no such element: Unable to locate element" in error_message:
+                errorMessage = str(e)
+                if "no such element: Unable to locate element" in errorMessage:
                     counter = counter + 1
-                    print("\n\nVaughan not available yet. Restarting again in 6 minutes. Counter: ", counter,  " Time: ", formatted_datetime)       
+                    print("\n\nVaughan not available yet. Restarting again in 6 minutes. Counter: ", counter,  " Time: ", formattedDateTime)       
                     closeBtn = driver.find_element(By.ID, "meta-nav--close") #close the navbar to prepare for the next cycle
                     closeBtn.click()
                     #put a counter so that you dont get emails every 6 minutes and instead only get every hour
                     if counter == 10:
                         #send email to show the movie not found
-                        message_body = f"""
+                        messageBody = f"""
                         Oppenheimer is NOT playing at Cineplex Cinemas Vaughan on July 29th.
 
                         https://www.cineplex.com/movie/oppenheimer-the-imax-experience-in-70mm-film?ic=cpx_hp-moviegrid-en
@@ -107,7 +107,7 @@ def oppenScrape(url):
                         Scraper status: {'Functional' if systemWorking else 'Down'}
                         
                         OppenScraperBot"""
-                        sendEmail("Oppenheimer NOT Found", message_body, recipients, importance="Low")
+                        sendEmail("Oppenheimer NOT Found", messageBody, recipients, importance="Low")
                         counter = 0                    
                     time.sleep(360) #wait 6 minutes before retrying
         except Exception as e:

@@ -8,20 +8,20 @@ from email.mime.text import MIMEText
 url = "https://www.cineplex.com/movie/oppenheimer-the-imax-experience-in-70mm-film?ic=cpx_hp-moviegrid-en"
 
 def sendEmail(subject, body, recipients, importance="High"):
-    sender_email = "example@gmail.com"  # Replace with your Gmail address
-    sender_password = "password"  # Replace with your Gmail App password, see here: 
+    senderEmail = "example@gmail.com"  # Replace with your Gmail address
+    senderPassword = "password"  # Replace with your Gmail App password, see here: 
     #https://stackoverflow.com/questions/72478573/how-to-send-an-email-using-python-after-googles-policy-update-on-not-allowing-j
 
     message = MIMEText(body)
     message["Subject"] = subject
-    message["From"] = sender_email
+    message["From"] = senderEmail
     message["To"] = ", ".join(recipients)
     message["Importance"] = importance
 
     try:
         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(sender_email, sender_password)
-            server.sendmail(sender_email, recipients, message.as_string())
+            server.login(senderEmail, senderPassword)
+            server.sendmail(senderEmail, recipients, message.as_string())
         print("Email sent successfully.")
     except Exception as e:
         print("Failed to send email:", e)
@@ -93,11 +93,11 @@ def oppenScrape(url):
                 errorMessage = str(e)
                 if "no such element: Unable to locate element" in errorMessage:
                     counter = counter + 1
-                    print("\n\nVaughan not available yet. Restarting again in 6 minutes. Counter: ", counter,  " Time: ", formattedDateTime)       
+                    print("\n\nVaughan not available yet. Restarting again in 5 minutes. Counter: ", counter,  " Time: ", formattedDateTime)       
                     closeBtn = driver.find_element(By.ID, "meta-nav--close") #close the navbar to prepare for the next cycle
                     closeBtn.click()
-                    #put a counter so that you dont get emails every 6 minutes and instead only get every hour
-                    if counter == 10:
+                    #put a counter so that you dont get emails every 5 minutes and instead only get every hour
+                    if counter == 12:
                         #send email to show the movie not found
                         messageBody = f"""
                         Oppenheimer is NOT playing at Cineplex Cinemas Vaughan on July 29th.
@@ -109,7 +109,7 @@ def oppenScrape(url):
                         OppenScraperBot"""
                         sendEmail("Oppenheimer NOT Found", messageBody, recipients, importance="Low")
                         counter = 0                    
-                    time.sleep(360) #wait 6 minutes before retrying
+                    time.sleep(300) #wait 5 minutes before retrying
         except Exception as e:
             print("Error: ", e)
             break
